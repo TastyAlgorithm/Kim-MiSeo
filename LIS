@@ -1,0 +1,57 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class LIS {	
+	static int[] arr;
+	static int[]dp;
+	static int C;
+	static int N;
+	
+	public static void main(String []args) throws IOException{
+		BufferedReader input=new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		C=Integer.parseInt(input.readLine()); //testcase
+		
+		while(C-->0) {
+			N=Integer.parseInt(input.readLine());		
+			arr=new int[N+1]; //입력받은 배열저장
+			dp=new int[N+1]; //N+1번째를 시작으로 하는 가장 긴 부분 수열의 최대길이
+			
+			//공백문자로 분리해 arr에 넣기
+			StringTokenizer st=new StringTokenizer(input.readLine()," ");
+			int index=1; //편의상 인덱스 1부터 시작
+			while(st.hasMoreTokens()) {
+				arr[index]=Integer.parseInt(st.nextToken());
+				index++;
+			}		
+			
+			int max=0;
+			for(int i=1;i<=N;++i) {
+				max=Math.max(max, solve(i));
+			}
+			
+			String result=Integer.toString(max);
+			writer.append(result);
+			writer.newLine();			
+		}
+		writer.flush();
+		writer.close();				
+	}
+	
+	//start부터 가장 긴 수열을 찾아 돌려줌
+	public static int solve(int start) {
+		int ret=dp[start];
+		
+		if(ret>0) 
+			return ret;
+		
+		ret=1; //어디서 시작하던 최소의 길이는 1
+		for(int i=start+1;i<=N;i++) {
+			if(arr[start]<arr[i]) { //다음 숫자가 더 크면__다음 숫자가 작을 때 빠져나옴
+				ret=Math.max(ret,solve(i)+1);
+			}
+		}
+		return dp[start]=ret;
+	}
+}
