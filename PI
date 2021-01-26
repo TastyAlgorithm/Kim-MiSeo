@@ -1,0 +1,92 @@
+import java.io.*;
+
+public class PI {
+	public static String str;
+	public static int dp[];
+	public static final int max=123456789;
+	public static String result;
+	
+	private static BufferedReader input=new BufferedReader(new InputStreamReader(System.in));
+	private static BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(System.out));
+	
+	public static void main(String[]args) throws IOException {
+		int C=Integer.parseInt(input.readLine());  //test case
+		
+		while (C-->0) {
+			str=input.readLine().trim();
+			dp=new int[str.length()];
+			
+			//dp초기화
+			for(int i=0;i<str.length();i++) {
+				dp[i]=-1;
+			}
+			
+			String result=Integer.toString(memorize(0));
+			
+			writer.append(result);
+			writer.newLine();
+		}
+		writer.flush();
+		writer.close();	
+	}
+	
+	public static int classify(int a, int b) {
+		String n=str.substring(a,b+1);
+		
+		//1번
+		String num1="";
+		for(int i=0;i<n.length();i++) {
+			num1+=n.charAt(0);
+		}
+		
+		if(num1.equals(n)) {
+			return 1;
+		}
+		
+		//2번
+		boolean num2=true;
+		for(int i=0;i<n.length()-1;i++) {
+			if(n.charAt(i+1)-n.charAt(i)!=n.charAt(1)-n.charAt(0)) { //등차가 다르면
+				num2=false;
+				break;
+			}
+		}
+		//등차가 1,-1일때
+		if(num2&&Math.abs((int)n.charAt(1)-(int)n.charAt(0))==1) {
+			return 2;
+		}
+		
+		boolean num3=true;
+		for(int i=0;i<n.length();i++) {
+			if(n.charAt(i)!=n.charAt(i%2)) { //번갈아 등장
+				num3=false;
+				break;
+			}
+		}
+		
+		if(num3) return 4;
+		if(num2) return 5;
+		
+		return 10;		
+	}
+	
+	public static int memorize(int start) {
+		//수열 끝
+		if(start==str.length()) {
+			return 0;
+		}
+		
+		if(dp[start]!=-1) {
+			return dp[start];
+		}
+		
+		int ret=max;
+		for(int i=3;i<=5;i++) {
+			if(start+i<=str.length()) {
+				ret=Math.min(ret,memorize(start+i)+classify(start,start+i-1));
+			}
+		}
+		dp[start]=ret;
+		return ret;		
+	}
+}
