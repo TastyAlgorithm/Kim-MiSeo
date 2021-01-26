@@ -1,0 +1,71 @@
+import java.io.*;
+import java.util.*;
+
+public class WILDCARD {
+	static String W;
+	static String S;
+	static int n;
+	static int [][] check=new int [101][101];
+	static ArrayList<String> answer;
+	static ArrayList<String> samples;
+	
+	public static void main(String []args) throws IOException{
+		BufferedReader input=new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		int C=Integer.parseInt(input.readLine()); //testcase
+		
+		while(C-->0) {
+			W=input.readLine();
+			n=Integer.parseInt(input.readLine());
+			samples=new ArrayList<String>();
+			answer=new ArrayList<String>();
+			
+			for(int i=0;i<n;i++) {
+				S=input.readLine().trim();
+				
+				//초기화
+				for(int j=0;j<101;j++) {
+					for(int k=0;k<101;k++) {
+						check[j][k]=-1;
+					}
+				}
+				
+				if(solve(0,0)==1) {
+					answer.add(S);
+				}	
+				
+				Collections.sort(answer);			
+			}
+			
+			for(int g=0;g<answer.size();g++) {
+				System.out.println(answer.get(g));
+				}
+		}
+		
+	}
+	
+	static int solve(int w,int s) {
+		if(check[w][s]!=-1)
+			return check[w][s];
+		
+		if(w<W.length()&&s<S.length()) {
+			if(W.charAt(w)=='?'|| W.charAt(w)==S.charAt(s))
+				return check[w][s]=solve(w+1,s+1);
+		}
+		
+		if(w==W.length()) {
+			if(s==S.length()) {
+				return check[w][s]=1;
+			}
+			else
+				return check[w][s]=0;
+		}
+		
+		if(W.charAt(w)=='*') { //*일때
+			if(solve(w+1,s)==1 || (s<S.length()&&(solve(w,s+1)==1))) //바로 다음 글자가 샘플과 동일하거나 / 샘플의 다음글자와 비교
+				return check[w][s]=1;
+		}
+		return check[w][s]=0;
+	}
+}
