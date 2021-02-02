@@ -1,0 +1,53 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class TRIANGLEPATH {
+	static Scanner sc=new Scanner(System.in);
+	static int C;
+	static int N;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		C=sc.nextInt();//testcase
+		
+		while(C-->0) {
+			
+			N=sc.nextInt();
+			int r=0;
+			
+			int[][]map=new int [N+1][N+1];
+			for(int i=1;i<=N;i++) {
+				for(int j=1;j<=i;j++) {
+					map[i][j]=sc.nextInt();
+					//System.out.println("map"+i+j+" "+map[i][j]);
+					
+				}
+			}			
+			r=Sum(map,N);
+			writer.append(Integer.toString(r));
+			writer.newLine();		
+		}
+		writer.flush();
+		writer.close();	
+	}	
+
+	//최대합 구하기
+	public static int Sum(int [][] map, int N) {
+		int [][] dp=new int [N+1][N+1];
+		
+		for(int i=1;i<=N;i++) {
+			for(int j=1;j<=i;j++) {
+				dp[i][j]=Math.max(dp[i-1][j]+map[i][j],dp[i-1][j-1]+map[i][j] ); //바로 윗 부분 , 왼쪽위 대각선으로(윗 숫자 기준 오른쪽) 둘중 하나의 
+			}
+		}
+		
+		int max=0;
+		for(int j=1;j<=N;j++) {
+			max=Math.max(max, dp[N][j]);
+		}
+		
+		return max;
+	}
+
+}
