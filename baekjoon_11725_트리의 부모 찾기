@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class baekjoon_11725 {
+	static int N;
+	static ArrayList<Integer>[] list;
+	static int[] parents;
+	static boolean[] check;
+	
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		N=sc.nextInt();
+		
+		list=new ArrayList[N+1];
+		parents=new int[N+1];
+		check=new boolean[N+1];
+		
+		for(int i=1;i<=N;i++) { //리스트 생성
+			list[i]=new ArrayList<Integer>();
+		}
+		
+		for(int j=1;j<N;j++) { //ex) 노드1과 연결된 노드들의 리스트를 만든다.
+			int a=sc.nextInt();
+			int b=sc.nextInt();
+			
+			list[a].add(b);
+			list[b].add(a);
+		}
+		
+		Stack<Integer> stack= new Stack<>();
+		
+		stack.push(1);
+		check[1]=true;
+		
+		while(!stack.isEmpty()) {
+			int start=stack.pop();
+			
+			for(int i=0;i<list[start].size();i++) {
+				int end=list[start].get(i);
+				
+				if(check[end]==false) {
+					parents[end]=start;
+					stack.push(end);
+					check[end]=true;					
+				}
+			}
+		}
+	
+		for(int i=2;i<=N;i++) {
+			System.out.println(parents[i]);
+		}
+	}
+
+
+}
