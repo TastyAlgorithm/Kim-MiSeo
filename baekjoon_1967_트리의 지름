@@ -1,0 +1,70 @@
+import java.util.*;
+
+public class baekjoon_1967 {
+	public static boolean check[];
+	public static int n;
+	public static int max=0;
+	public static int max_idx=0;
+	public static ArrayList<Node> tree[];
+	
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		n=sc.nextInt();
+		
+		tree=new ArrayList[n+1];
+		
+		for(int i=0;i<=n;i++) {
+			tree[i]=new ArrayList<>();
+		}
+		
+		for(int j=0;j<n-1;j++) {
+			int parent=sc.nextInt();
+			int child=sc.nextInt();
+			int w=sc.nextInt();
+			
+			//양방향
+			tree[parent].add(new Node(child,w)); //부모-->자식
+			tree[child].add(new Node(parent,w)); //자식-->부모
+		}
+		
+		//루트 노드로 부터 제일 멀리 떨어진 노드구하기
+		check=new boolean[n+1];
+		check[1]=true;
+		solve(1,0);
+		
+		//위의 노드로부터 가장 멀리 떨어진 노드
+		check=new boolean[n+1];
+		check[max_idx]=true;
+		solve(max_idx,0);
+		
+		System.out.println(max);
+	}
+	
+	//dfs이용
+	public static void solve(int idx,int k) {
+		if(max<k) {
+			max=k;
+			max_idx=idx;
+		}
+		
+		/*java 향상된 for문
+		 for(대입받을 정수 정의 : 배열명)
+		 배열의 항목수만큼 실행
+		 배열만 사용이 가능하다, 값을 바꿀 수는 없다. */
+		for(Node a: tree[idx]) {
+			if(!check[a.idx]) {
+				check[a.idx]=true;
+				solve(a.idx,k+a.k);
+			}
+		}
+	}
+
+	public static class Node{
+		int idx, k; //노드 번호, 가중치
+		
+		Node(int idx, int k){
+			this.idx=idx;
+			this.k=k;
+		}
+	}
+}
