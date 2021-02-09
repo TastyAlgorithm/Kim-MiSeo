@@ -1,0 +1,37 @@
+import java.io.*;
+import java.util.Arrays;
+
+public class baekjoon_5052 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		int t=Integer.parseInt(bf.readLine()); //testcase
+		while (t-->0) {
+			int n=Integer.parseInt(bf.readLine()); //전화번호 수
+			String [] phones=new String[n];
+			String result="YES";
+			
+			//배열에 전화번호 저장
+			for(int i=0;i<n;i++) {
+				phones[i]=bf.readLine();
+			}
+			
+			Arrays.sort(phones);
+			for(int i=0;i<n-1;i++) {
+				if(phones[i+1].startsWith(phones[i])) {
+					result="NO";
+					break;
+				}
+			}
+			
+			writer.append(result);
+			writer.newLine();	
+		}
+		writer.flush();
+		writer.close();	
+		bf.close();
+	}
+
+}
