@@ -1,0 +1,48 @@
+import java.util.*;
+
+public class baekjoon_2606 {
+	static int N; //컴퓨터 수==점의수
+	static int C; //컴퓨터 쌍의 수 == 간선의 수
+	static ArrayList<Integer>[] a;
+	static boolean[] visit;
+	
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		N=sc.nextInt();
+		C=sc.nextInt();
+		
+		a=new ArrayList[N+1]; //편의상 N+1, 0번째 요소 사용안함.
+		visit=new boolean[N+1];
+		
+		for(int i=0;i<N+1; i++) {
+			a[i]=new ArrayList<>();
+		}
+		
+		for(int i=0;i<C;i++) {
+			int first=sc.nextInt();
+			int second=sc.nextInt();
+			a[first].add(second);
+			a[second].add(first);
+		}
+		
+		DFS(1);
+		
+		int result=0;
+		for(boolean f:visit) {
+			if(f==true)
+				result++;
+		}
+		
+		System.out.println(result-1); //1번 컴퓨터 제외
+	}
+	
+	private static void DFS(int first) {
+		visit[first]=true;
+		
+		for(int second:a[first]) {
+			if(visit[second]==false)
+				DFS(second);
+		}
+	}
+
+}
